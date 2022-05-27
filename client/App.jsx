@@ -6,6 +6,6 @@ const App = props => {
   )
 }
 
-console.log("I hate githubII")
+console.log("I REALLY hate that github omg")
 
 export default App;
