@@ -3,6 +3,7 @@ import RemotiveDisplay from './remotive_display/RemotiveDisplay.jsx'
 import ApplicationsDisplay from './application_display/ApplicationsDisplay.jsx';
 
 const JobDashboard = props => {
+console.log('props.applications:', props.applications)
 
   return (
     <div className='JobDashboardContainer'>
@@ -11,7 +12,7 @@ const JobDashboard = props => {
       </header>
       <div className='listingsAndAppContainer'>
         <RemotiveDisplay getApiInfo={props.getApiInfo} jobs={props.jobs} addApplication={props.addApplication}/>
-        <ApplicationsDisplay/>
+        <ApplicationsDisplay applications={props.applications}/>
       </div>
     </div>
   )

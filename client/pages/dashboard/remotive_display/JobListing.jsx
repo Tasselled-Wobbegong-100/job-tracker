@@ -14,10 +14,11 @@ const JobListing = props => {
   // https://stackoverflow.com/questions/10585029/parse-an-html-string-with-js
 
   if(!job.salary){
-    job.salary = 'It\s a surprise!'
+    job.salary = 'It\'s a surprise!'
   }
-  let newStr = "";
+
   //HTML parser function fail
+  // let newStr = "";
   // for(let i = 0; i < job.description.length; i++){
   //   let char = job.description[i];
   //   if(char === '<'){
@@ -31,7 +32,10 @@ const JobListing = props => {
 
   return (
     <div className='JobListingContainer'>
-      <h1 id='ListingHeader'><span><img className='CompanyLogo' src={job.company_logo_url}></img></span>{job.company_name}</h1>
+      <header id='ListingHeader'>
+        <img className='CompanyLogo' src={job.company_logo_url}></img>
+        <h1>{job.company_name}</h1>
+      </header>
       <ul>
         <li>Job Title: {job.title}</li>
 
@@ -42,7 +46,7 @@ const JobListing = props => {
         <li>Relevant Tags: {job.tags.join(", ")}</li>
 
       <br></br>
-        <button style={{backgroundColor: 'yellow'}} onClick={() => props.addApplication(props.job)}>
+        <button className='readyToApplyButton' onClick={() => props.addApplication(props.job)}>
           Ready to apply for this job?
         </button>
 

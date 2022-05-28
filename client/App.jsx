@@ -13,17 +13,11 @@ class App extends Component {
       jobs: {
         jobs: ''
       },
-      loginChange: {
+      formChange: {
         username: '',
         password: ''
       },
-      signUpChange: {
-        username: '',
-        password: ''
-      },
-      applications: {
-          applicationList: []
-      }
+      applications: ['dummy application']
     }
 
     //MVP
@@ -39,6 +33,7 @@ class App extends Component {
       this.getApiInfo = this.getApiInfo.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.submitLogin = this.submitLogin.bind(this);
+      this.submitSignUp = this.submitSignUp.bind(this);
           
       //Nice to have
         //Update job application
@@ -52,20 +47,24 @@ class App extends Component {
   handleChange (event) {
     event.preventDefault();
     const { value, id } = event.target;
-    if (id === 'usernameLoginInput'){
-      const loginChange = {...this.state.loginChange};
-      loginChange.username = value;
-      this.setState({loginChange}, () => console.log(this.state.loginChange.username));
+    if (id === 'usernameLoginInput' || id === 'usernameSignUpInput'){
+      const formChange = {...this.state.formChange};
+      formChange.username = value;
+      this.setState({formChange}, () => console.log(this.state.formChange.username));
     }
-    if (id === 'passwordLoginInput'){
-      const loginChange = {...this.state.loginChange};
-      loginChange.password = value;
-      this.setState({loginChange}, () => console.log(this.state.loginChange.password));
+    if (id === 'passwordLoginInput' || id === 'passwordSignUpInput'){
+      const formChange = {...this.state.formChange};
+      formChange.password = value;
+      this.setState({formChange}, () => console.log(this.state.formChange.password));
     }
   }
 
   submitLogin (event) {
-    console.log(this.state.loginChange.username);
+    console.log('submitLogin: ', this.state.formChange.username);
+  }
+
+  submitSignUp (event) {
+    console.log('submitSignUp: ', this.state.formChange.username);
   }
 
   createUser(){
@@ -85,9 +84,11 @@ class App extends Component {
     //   headers: {
     //     'Content-Type': 'application/json'
     //   }})
-    //   .then(data => 
+    //   .then(data => {
+    // let updatedApplicationList = this.state.applications.push(data)
     //     this.setState({
-    //       newApplication: data
+    //       applications: updatedApplicationList
+    //      }
     //     })
     //   )
     console.log('POST request sent')
@@ -122,7 +123,10 @@ class App extends Component {
           <Route
             exact
             path="/signup"
-            element={ <SignUp /> }
+            element={ <SignUp 
+              handleChange={this.handleChange}
+              submitSignUp={this.submitSignUp}
+            /> }
           />
           <Route
             exact
@@ -132,6 +136,7 @@ class App extends Component {
               jobs={this.state.jobs}
               addApplication={this.addApplication}
               newApplication={this.state.newApplication}
+              applications={this.state.applications}
             />}
           />
           <Route
