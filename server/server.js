@@ -9,14 +9,15 @@ const PORT = 3000;
 
 //handle parsing request body
 app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 //uses /dist for static files in webpack production mode
 console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, '../dist')));
 }
 
+// Hey Hank, do we need this? Seems like this would be handled with react.
 //app entry point
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../index.html'));
