@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import SignUp from './pages/signUp.jsx';
 import LoginPage from './pages/login.jsx';
 import ApplicationToDoList from './pages/tracker/applicationToDoList.jsx';
-import JobDashboard from './pages/home/jobDashboard.jsx';
+import JobDashboard from './pages/dashboard/jobDashboard.jsx';
 import './stylesheets/styles.scss';
 
 class App extends Component {
