@@ -24,8 +24,7 @@ app.get('/', (req, res) => {
 
 
 //handles api endpoints in api routes/api.js
-//app.use('/api', apiRouter);
-
+// app.use('/api', apiRouter);
 
 
 //unknown route handler

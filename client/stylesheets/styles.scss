@@ -1,3 +1,7 @@
+// * {
+//   border: 1px solid red;
+// }
+
 .loginContainer {
   display: flex;
   flex-direction: column;
@@ -12,4 +16,47 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: center;
+}
+
+.JobDashboardContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.listingsAndAppContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.RemotiveContainer {
+  margin-right: 10px;
+  display: flex;
+  border: 1px solid black;
+  width: 500px;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+
+.ApplicationsDisplayContainer {
+  margin-left: 10px;
+  display: flex;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  // border: 1px solid black;
+  width: 500px;
+  height: 500px;
+}
+
+.CompanyLogo {
+  size: 50%;
 }

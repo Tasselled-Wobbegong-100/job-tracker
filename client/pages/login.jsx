@@ -1,19 +1,22 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = props => {
 
-  const test = (event) => {
+  let navigate = useNavigate();
+
+  const submit = async (event) => {
     event.preventDefault();
-    console.log('testing LoginPage submit function, event id: ', event.target.id);
+    props.submitLogin(event);
+    navigate('./dashboard', {replace: true});
   }
 
   return (
     <div className='loginContainer'>    
       <form className='loginForm'>
-        <input id='usernameLoginInput' className='inputTextForm' type='text' placeholder='username'/>
-        <input id='passwordLoginInput' className='inputTextForm' type='text' placeholder='password'/>
-        <button id='loginSubmitButton' className='submitFormButton' onClick={test}>Submit</button>
+        <input id='usernameLoginInput' className='inputTextForm' type='text' placeholder='username' onChange={props.handleChange}/>
+        <input id='passwordLoginInput' className='inputTextForm' type='text' placeholder='password' onChange={props.handleChange}/>
+        <button id='loginSubmitButton' className='submitFormButton' onClick={submit}>Submit</button>
       </form>
       <Link to='/dashboard'>Dashboard</Link>
       <Link to='/tracker/:id'>To Do List</Link>
