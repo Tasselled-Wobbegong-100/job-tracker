@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 
 //handles api endpoints in api routes/api.js
-// app.use('/api', apiRouter);
+app.use('/api', apiRouter);
 
 
 //unknown route handler
@@ -42,6 +42,11 @@ app.use((err, req, res, next) => {
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
+
+// get -> getting all application associated with specific id 
+
+// post -> adding new app save specific app and send back to the front 
+
 
 //starts server
 app.listen(PORT, () => {
