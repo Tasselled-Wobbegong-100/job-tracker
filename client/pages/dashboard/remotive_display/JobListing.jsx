@@ -39,18 +39,18 @@ const JobListing = props => {
       <ul>
         <li>Job Title: {job.title}</li>
 
-        <li>Salary: {job.salary}</li>
+        <li>💰 {job.salary} 💰</li>
 
-        <li>Location: {job.candidate_required_location}</li>
+        <li>📍 {job.candidate_required_location}</li>
 
         <li>Relevant Tags: {job.tags.join(", ")}</li>
+      </ul>
 
       <br></br>
         <button className='readyToApplyButton' onClick={() => props.addApplication(props.job)}>
           Ready to apply for this job?
         </button>
 
-      </ul>
     </div>
   )
 }

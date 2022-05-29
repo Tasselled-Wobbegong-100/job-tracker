@@ -17,12 +17,22 @@ class App extends Component {
         username: '',
         password: ''
       },
-      applications: ['dummy application']
+      applications: [
+        {id: 26,
+        role_title: "Senior Everything Engineer",
+        company: "Toys R US",
+        location: "Antarctica",
+        interview_number: "500",
+        application_submitted: "3000 BC (Before Codesmith)",
+        follow_up_deadline: "May 67th, 2088",
+        job_type: "Cleaning",
+        salary: "1 trillion / year",
+        application_status: "Rejected"
+      }],
+      currentUser: ''
     }
 
     //MVP
-      //Create new User (for signup)
-      this.createUser = this.createUser.bind(this);
       //Verify User (aka get user)
       this.verifyUser = this.verifyUser.bind(this);
       //Add new application
@@ -34,6 +44,7 @@ class App extends Component {
       this.handleChange = this.handleChange.bind(this);
       this.submitLogin = this.submitLogin.bind(this);
       this.submitSignUp = this.submitSignUp.bind(this);
+      this.setCurrentUser = this.setCurrentUser.bind(this);
           
       //Nice to have
         //Update job application
@@ -42,6 +53,15 @@ class App extends Component {
 
   componentDidMount() {
     this.getApiInfo();
+  }
+
+  //componentDidUp() {
+    // this.getApps
+  //}
+
+  getApps(user) {
+    // send get requet to router endpoint that will
+    // get all user application data from database  
   }
 
   handleChange (event) {
@@ -59,16 +79,43 @@ class App extends Component {
     }
   }
 
-  submitLogin (event) {
-    console.log('submitLogin: ', this.state.formChange.username);
+  submitLogin () {
+    // console.log('submitLogin: ', this.state.formChange.username);
+    // const { username, password } = this.state.formChange;
+    // try {
+    //   const res = fetch('/api/login', {
+    //     method: 'get',
+
+    //   })
+    // } catch (err) {
+    //   console.log(err);
+    // }
   }
 
-  submitSignUp (event) {
-    console.log('submitSignUp: ', this.state.formChange.username);
+  submitSignUp () {
+    const { username, password } = this.state.formChange;
+    try{
+      const res = fetch('/api/signup', {
+        method: 'post',
+        body: JSON.stringify({
+          username: username,
+          password: password.toString()
+        }),
+        headers: {
+          'Content-Type' : 'application/json; charset=UTF-8'
+        }
+      })
+      console.log('submitSignUp: ', this.state.formChange.username);
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  createUser(){
-
+  setCurrentUser () {
+    this.setState({currentUser: this.state.formChange.username}, () => {
+      console.log('set current user: ', this.state)
+    })
   }
 
   verifyUser(){
@@ -76,21 +123,31 @@ class App extends Component {
   }
   
   addApplication(job) {
-
+    const { category, candidate_required_location, company_name, job_type, salary } = job;
+    const reqBody = {
+      username: this.state.currentUser,
+      role_title: category,
+      company: company_name,
+      location: candidate_required_location,
+      interview_number: '',
+      application_submitted: '',
+      follow_up_deadline: '',
+      job_type: job_type,
+      salary: salary,
+      application_status: ''
+    };
+    console.log(reqBody)
     // POST request to backend
-    // fetch('/api',{
-    //   method: 'POST',
-    //   body: JSON.stringify(job),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }})
-    //   .then(data => {
-    // let updatedApplicationList = this.state.applications.push(data)
-    //     this.setState({
-    //       applications: updatedApplicationList
-    //      }
-    //     })
-    //   )
+    fetch('/api',{
+      method: 'POST',
+      body: JSON.stringify(reqBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }})
+      .then(data => {
+        let updatedApplicationList = this.state.applications.push(data)
+        this.setState({applications: updatedApplicationList})
+      });
     console.log('POST request sent')
     return;
   }
@@ -124,6 +181,7 @@ class App extends Component {
             exact
             path="/signup"
             element={ <SignUp 
+              setCurrentUser={this.setCurrentUser}              
               handleChange={this.handleChange}
               submitSignUp={this.submitSignUp}
             /> }
@@ -149,5 +207,6 @@ class App extends Component {
     )
    }
   }
+
 
 export default App;
