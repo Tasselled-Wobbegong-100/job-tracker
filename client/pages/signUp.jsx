@@ -6,8 +6,13 @@ const SignUp = props => {
 
   const submit = async (event) => {
     event.preventDefault();
-    props.submitSignUp(event);
-    navigate('../dashboard', {replace: true});
+    const res = await props.submitSignUp(event);
+    if (res.status === 200){
+      console.log('valid response')
+      props.setCurrentUser();
+      return navigate('../dashboard', {replace: true});
+    }
+    return console.log(`invaid response, status ${res.status}`);
   }
 
   return (
