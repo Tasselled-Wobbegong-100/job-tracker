@@ -6,17 +6,11 @@ const trackerController = {};
 
 // Creates a new user on signup page
 trackerController.createdUser = (req, res, next) => {
-<<<<<<< HEAD
+
   const { username, password } = req.body;
   const value = [username, password];
 
   const query = 'INSERT INTO userInfo (username, password) VALUES ($1,$2)';
-=======
-  const {username, password } = req.body;
-  const value = [username, password];
-
-  const query = 'INSERT INTO userInfo (username, password) VALUES ,$2)';
->>>>>>> dev
 
   db.query(query, value)
     .then((data) => {
