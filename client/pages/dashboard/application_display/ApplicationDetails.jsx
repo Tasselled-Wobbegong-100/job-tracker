@@ -1,7 +1,8 @@
 import React from 'react';
 
 const ApplicationDetails = props => {
-  const { role_title, company, application_status } = props.application;
+  const { id, role_title, company, application_status } = props.application;
+  const trackerPath = `/tracker/${id}`;
 
   return (
     <div className='ApplicationDetailsContainer'>
@@ -11,7 +12,7 @@ const ApplicationDetails = props => {
       <p id='appDetailStatus'>
         Application Status: {application_status}
       </p>
-      {/* <Link to='/tracker/:id'>To Do List</Link> */}
+      {/* <Link to={trackerPath}>To Do List</Link> */}
     </div>
   )
 }

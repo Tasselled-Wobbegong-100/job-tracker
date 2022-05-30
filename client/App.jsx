@@ -29,7 +29,8 @@ class App extends Component {
         salary: "1 trillion / year",
         application_status: "Rejected"
       }],
-      currentUser: ''
+      currentUser: '',
+      currentApp: {},
     }
 
     //MVP
@@ -38,13 +39,14 @@ class App extends Component {
       //Add new application
       this.addApplication = this.addApplication.bind(this);
       //Get application details => open application tracker route
-      this.getApplication = this.getApplication.bind(this);
+      this.getApplication = this.getApps.bind(this);
       //API Call
       this.getApiInfo = this.getApiInfo.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.submitLogin = this.submitLogin.bind(this);
       this.submitSignUp = this.submitSignUp.bind(this);
       this.setCurrentUser = this.setCurrentUser.bind(this);
+      this.submitAppDetail = this.submitAppDetail.bind(this);
           
       //Nice to have
         //Update job application
@@ -55,14 +57,9 @@ class App extends Component {
     this.getApiInfo();
   }
 
-  //componentDidUp() {
-    // this.getApps
+  //componentDidUpdate() {
+    // this.getApps(this.state.currentUser);
   //}
-
-  getApps(user) {
-    // send get requet to router endpoint that will
-    // get all user application data from database  
-  }
 
   handleChange (event) {
     event.preventDefault();
@@ -138,7 +135,7 @@ class App extends Component {
     };
     console.log(reqBody)
     // POST request to backend
-    fetch('/api',{
+    fetch('/api/newApp',{
       method: 'POST',
       body: JSON.stringify(reqBody),
       headers: {
@@ -152,8 +149,24 @@ class App extends Component {
     return;
   }
 
-  getApplication() {
+   getApps(user) {      // get all user application data from database 
+    // fetch('', {       //endpoint for getting all user applications
+    //   method: 'GET',
+    //   body: JSON.stringify({ username: user }),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })   
+    //   .then(data => data.json())
+    //   .then(data => {
+    //     let updatedApplicationList = this.state.applications.push(data)
+    //     this.setState({applications: updatedApplicationList})
+    // })
+    //   .catch(err => console.log('error getting user applications: ', err));
+  }
 
+  submitAppDetail(detail) {
+    
   }
 
   getApiInfo () {
@@ -199,8 +212,12 @@ class App extends Component {
           />
           <Route
             exact
-            path="/tracker/:id"
-            element={ <ApplicationToDoList /> }
+            path="/tracker"
+            element={ <ApplicationToDoList 
+              applications={this.state.aplications}
+              currentUser={this.state.currentUser}
+              currentApp={this.state.currentApp}
+            /> }
           />
       </Routes>
     </div>
