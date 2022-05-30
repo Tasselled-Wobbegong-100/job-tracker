@@ -12,7 +12,7 @@ const JobSearchListings = props => {
   }; 
   
   return (
-    <div id='JobSearchListingsContainer'>
+    <div className='JobSearchListingsContainer'>
       {jobsToDisplay}
     </div>
   )
