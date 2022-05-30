@@ -101,6 +101,7 @@ class App extends Component {
       } else {
         const data = await res.json();
         this.setCurrentUser(data);
+        this.getApps(this.state.currentUser);
       }
       return res;
     } catch (err) {
@@ -108,7 +109,9 @@ class App extends Component {
     }
   }
 
-  async submitSignUp () {
+  async submitSignUp (event) {
+    if (event) event.preventDefault();
+
     const { username, password } = this.state.formChange;
     try{
       const res = await fetch('/api/signup', {
@@ -124,6 +127,7 @@ class App extends Component {
       if (res.status === 200){
         const data = await res.json();
         this.setCurrentUser(data);
+        this.getApps(this.state.currentUser);
       }
       return res;
     } catch (err) {
@@ -163,27 +167,20 @@ class App extends Component {
         'Content-Type': 'application/json'
       }})
       .then(data => {
-        let updatedApplicationList = this.state.applications.push(data)
-        this.setState({applications: updatedApplicationList})
+        //let updatedApplicationList = this.state.applications.push(data)
+        this.getApps(this.state.currentUser);
       });
     console.log('POST request sent')
     return;
   }
 
-   getApps(user) {      // get all user application data from database 
-    // fetch('', {       //endpoint for getting all user applications
-    //   method: 'GET',
-    //   body: JSON.stringify({ username: user }),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })   
-    //   .then(data => data.json())
-    //   .then(data => {
-    //     let updatedApplicationList = this.state.applications.push(data)
-    //     this.setState({applications: updatedApplicationList})
-    // })
-    //   .catch(err => console.log('error getting user applications: ', err));
+  async getApps(user) {
+    const res = await fetch(`/api/getApps/${user.username}`, {  
+      method: 'GET'
+    })
+    const data = await res.json();
+    this.setState({applications: data})
+    return data;
   }
 
   submitAppDetail(detail) {

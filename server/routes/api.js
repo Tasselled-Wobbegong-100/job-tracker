@@ -13,6 +13,10 @@ router.get("/login", trackerController.verifyUser, (req, res) => {
   return res.status(200).json(res.locals.data)
 })
 
+router.get('/getApps/:id', trackerController.returnUser, (req, res) => {
+  return res.status(200).json(res.locals.apps)
+})
+
 router.post("/newApp", trackerController.createApp, (req, res) => {
   res.send(200).json(res.locals.newApp);
 })

@@ -4,6 +4,7 @@ router = express.Router();
 
 const trackerController = {};
 
+//verify user on login
 trackerController.verifyUser = (req, res, next) => {
 
   const credentials = req.headers.authorization.split(' ');
@@ -54,14 +55,15 @@ trackerController.createdUser = (req, res, next) => {
 
 //get -> getting all application associated with specific id 
 trackerController.returnUser = (req, res, next) => {
-  const {username} = req.body;
+
+  const username = req.params.id;
   const value = [username];
 
   const query = 'SELECT * FROM userInfo JOIN appInfo ON userInfo._id = appInfo.user_account_id WHERE userInfo.username = ($1)';
 
   db.query(query, value)
     .then(data => {
-      res.locals.returnUser = data.rows;
+      res.locals.apps = data.rows;
       return next();
     })
     .catch(err => next({
@@ -74,17 +76,29 @@ trackerController.returnUser = (req, res, next) => {
 // post -> adding new app save specific app and send back to the front 
 trackerController.createApp = (req, res, next) => {
 
-  const {role_title ,company ,location ,interview_number, application_submitted, follow_up_deadline,job_type ,
-    salary,application_status,user_account_id} = req.body;
+  console.log(req.body)
+  const {
+    role_title, 
+    company, 
+    location, 
+    interview_number,
+    application_submitted,
+    follow_up_deadline,
+    job_type,
+    salary,
+    application_status,
+    user_account_id
+  } = req.body;
 
-  const value = [role_title ,company ,location ,interview_number, application_submitted, follow_up_deadline,job_type ,
-    salary,application_status,user_account_id];
+  const value = [role_title, company, location, interview_number, application_submitted, follow_up_deadline, job_type,
+    salary, application_status, user_account_id];
 
   const query = 'INSERT INTO appInfo (role_title, company, location, interview_number, application_submitted, follow_up_deadline, job_type, salary, application_status, user_account_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
   
 
   db.query(query, value)
     .then((data) => {
+      console.log('createApplication', data)
       res.locals.newApp = data.rows[0];
       return next();
     })
