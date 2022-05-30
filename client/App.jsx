@@ -15,7 +15,8 @@ class App extends Component {
       },
       formChange: {
         username: '',
-        password: ''
+        password: '',
+        isUser: ''
       },
       applications: [
         {id: 26,
@@ -29,13 +30,14 @@ class App extends Component {
         salary: "1 trillion / year",
         application_status: "Rejected"
       }],
-      currentUser: '',
+      currentUser: {
+        username: '',
+        id: ''
+      },
       currentApp: {},
     }
 
     //MVP
-      //Verify User (aka get user)
-      this.verifyUser = this.verifyUser.bind(this);
       //Add new application
       this.addApplication = this.addApplication.bind(this);
       //Get application details => open application tracker route
@@ -76,23 +78,40 @@ class App extends Component {
     }
   }
 
-  submitLogin () {
-    // console.log('submitLogin: ', this.state.formChange.username);
-    // const { username, password } = this.state.formChange;
-    // try {
-    //   const res = fetch('/api/login', {
-    //     method: 'get',
+  async submitLogin (event) {
+    if (event) event.preventDefault();
 
-    //   })
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    const formChange = {...this.state.formChange};
+    formChange.isUser = '';
+    this.setState({formChange})
+
+    const { username, password } = formChange;
+    const reqData = username + ' ' + password;
+    try {
+      const res = await fetch('/api/login', {
+        method: 'get',
+        headers: {
+          "Content-Type": "text/plain",
+          'Authorization': reqData
+        }
+      })
+      if (res.status !== 200){
+        formChange.isUser = 'Invalid username or password'
+        this.setState({formChange})
+      } else {
+        const data = await res.json();
+        this.setCurrentUser(data);
+      }
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  submitSignUp () {
+  async submitSignUp () {
     const { username, password } = this.state.formChange;
     try{
-      const res = fetch('/api/signup', {
+      const res = await fetch('/api/signup', {
         method: 'post',
         body: JSON.stringify({
           username: username,
@@ -102,27 +121,29 @@ class App extends Component {
           'Content-Type' : 'application/json; charset=UTF-8'
         }
       })
-      console.log('submitSignUp: ', this.state.formChange.username);
+      if (res.status === 200){
+        const data = await res.json();
+        this.setCurrentUser(data);
+      }
       return res;
     } catch (err) {
       console.log(err);
     }
   }
 
-  setCurrentUser () {
-    this.setState({currentUser: this.state.formChange.username}, () => {
-      console.log('set current user: ', this.state)
+  setCurrentUser (data) {
+    const currentUser = {...this.state.currentUser};
+    currentUser.username = data.user.username;
+    currentUser.id = data.user._id;
+    this.setState({currentUser}, () => {
+      console.log('set current user: ', this.state.currentUser)
     })
-  }
-
-  verifyUser(){
-    
   }
   
   addApplication(job) {
     const { category, candidate_required_location, company_name, job_type, salary } = job;
     const reqBody = {
-      username: this.state.currentUser,
+      user_account_id: this.state.currentUser.id,
       role_title: category,
       company: company_name,
       location: candidate_required_location,
@@ -186,6 +207,8 @@ class App extends Component {
           exact
           path="/"
           element={ <LoginPage 
+            isUser={this.state.formChange.isUser}
+            setCurrentUser={this.setCurrentUser} 
             handleChange={this.handleChange}
             submitLogin={this.submitLogin}
           />}

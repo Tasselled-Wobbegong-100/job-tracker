@@ -9,8 +9,8 @@ router.post("/signup", trackerController.createdUser, (req, res) => {
 })
 
 // return all applications related to one user
-router.get("/login", trackerController.returnUser, (req, res) => {
-  return res.status(200).json(res.locals.returnUser)
+router.get("/login", trackerController.verifyUser, (req, res) => {
+  return res.status(200).json(res.locals.data)
 })
 
 router.post("/newApp", trackerController.createApp, (req, res) => {

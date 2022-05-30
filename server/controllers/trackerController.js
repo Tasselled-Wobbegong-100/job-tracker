@@ -4,6 +4,31 @@ router = express.Router();
 
 const trackerController = {};
 
+trackerController.verifyUser = (req, res, next) => {
+
+  const credentials = req.headers.authorization.split(' ');
+  const username = credentials[0];
+  const password = credentials[1];
+
+  const value = [username, password];
+  const query = 'SELECT * FROM userInfo WHERE username = $1 AND password = $2'
+
+  db.query(query, value)
+    .then(data => {
+      if (data.rows[0]){
+        res.locals.data = {};
+        res.locals.data.user = data.rows[0];
+        return next();
+      } else {
+        return next ('user not found')
+      }
+    })
+    .catch (err => {
+      return next('error in trackerController.verifyUser', err);
+    })
+}
+
+
 // Creates a new user on signup page
 trackerController.createdUser = (req, res, next) => {
 

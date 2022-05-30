@@ -7,12 +7,15 @@ const LoginPage = props => {
 
   const submit = async (event) => {
     event.preventDefault();
-    props.submitLogin(event);
-    navigate('./dashboard', {replace: true});
+    const res = await props.submitLogin(event);
+    if (res.status === 200){
+      return navigate('../dashboard', {replace: true});
+    }
   }
 
   return (
-    <div className='loginContainer'>    
+    <div className='loginContainer'>
+      <div className='invaidEntry'>{props.isUser}</div>
       <form className='loginForm'>
         <input id='usernameLoginInput' className='inputTextForm' type='text' placeholder='username' onChange={props.handleChange}/>
         <input id='passwordLoginInput' className='inputTextForm' type='password' placeholder='password' onChange={props.handleChange}/>
