@@ -151,7 +151,7 @@ class App extends Component {
       follow_up_deadline: '',
       job_type: job_type,
       salary: salary,
-      application_status: ''
+      application_status: 'In progress'
     };
     console.log(reqBody)
     // POST request to backend
@@ -178,9 +178,9 @@ class App extends Component {
   }
 
   async getCurrentApp (event) {
+    
     if (event) event.preventDefault();
     const id = event.target.id.toString();
-    console.log(event.target)
 
     const res = await fetch(`/api/currentApp/${id}`, {
       method: 'get'

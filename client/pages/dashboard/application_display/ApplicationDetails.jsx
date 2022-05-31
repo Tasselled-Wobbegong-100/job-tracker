@@ -16,12 +16,14 @@ const ApplicationDetails = props => {
       <p id='appDetailStatus'>
         Application Status: {application_status}
       </p>
+      <div className='editBu'>
       <Link to={trackerPath} id={_id}
       onClick={async (event) => {
           await props.getCurrentApp(event);
           return navigate(`../${trackerPath}`, {replace: true});
         }
       }>Edit</Link>
+      </div>
     </div>
   )
 }
