@@ -18,8 +18,7 @@ class App extends Component {
         password: '',
         isUser: ''
       },
-      applications: [
-        {id: 26,
+      applications: [ {_id: 26,
         role_title: "Senior Everything Engineer",
         company: "Toys R US",
         location: "Antarctica",
@@ -49,7 +48,7 @@ class App extends Component {
       this.submitSignUp = this.submitSignUp.bind(this);
       this.setCurrentUser = this.setCurrentUser.bind(this);
       this.submitAppDetail = this.submitAppDetail.bind(this);
-          
+      this.getCurrentApp = this.getCurrentApp.bind(this);
       //Nice to have
         //Update job application
         //Delete job application
@@ -58,10 +57,6 @@ class App extends Component {
   componentDidMount() {
     this.getApiInfo();
   }
-
-  //componentDidUpdate() {
-    // this.getApps(this.state.currentUser);
-  //}
 
   handleChange (event) {
     event.preventDefault();
@@ -166,8 +161,7 @@ class App extends Component {
       headers: {
         'Content-Type': 'application/json'
       }})
-      .then(data => {
-        //let updatedApplicationList = this.state.applications.push(data)
+      .then(() => {
         this.getApps(this.state.currentUser);
       });
     console.log('POST request sent')
@@ -179,8 +173,22 @@ class App extends Component {
       method: 'GET'
     })
     const data = await res.json();
-    this.setState({applications: data})
+    this.setState({applications: data}, () => console.log('getApps: ', this.state.applications))
     return data;
+  }
+
+  async getCurrentApp (event) {
+    if (event) event.preventDefault();
+    const id = event.target.id.toString();
+    console.log(event.target)
+
+    const res = await fetch(`/api/currentApp/${id}`, {
+      method: 'get'
+    })
+    const data = await res.json();   
+    this.setState({currentApp: data}, () => {
+      console.log(this.state.currentApp)
+    })
   }
 
   submitAppDetail(detail) {
@@ -188,7 +196,6 @@ class App extends Component {
   }
 
   getApiInfo () {
-    
     fetch('../server/dummy_api/remotive.json')
       .then(response => response.json())
       .then(data => 
@@ -223,18 +230,17 @@ class App extends Component {
             exact
             path="/dashboard"
             element={ <JobDashboard 
-              getApiInfo={this.getApiInfo} 
               jobs={this.state.jobs}
+              getApiInfo={this.getApiInfo} 
+              getCurrentApp={this.getCurrentApp}
               addApplication={this.addApplication}
-              newApplication={this.state.newApplication}
               applications={this.state.applications}
             />}
           />
           <Route
             exact
-            path="/tracker"
+            path="/tracker/:id"
             element={ <ApplicationToDoList 
-              applications={this.state.aplications}
               currentUser={this.state.currentUser}
               currentApp={this.state.currentApp}
             /> }
