@@ -4,7 +4,9 @@ import JobSearchListings from './JobSearchListings.jsx';
 const RemotiveDisplay = props => {
   return (
     <div className='RemotiveContainer'>
-      <h3 id='browse'>Browse Postings</h3>
+      <header>
+        <h2 id='browse'>Browse Postings</h2>
+      </header>
       <JobSearchListings getApiInfo={props.getApiInfo} jobs={props.jobs} addApplication={props.addApplication}/>
     </div>
   )

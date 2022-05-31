@@ -6,7 +6,7 @@ import ApplicationDetails from './ApplicationDetails.jsx';
 const MyApplicationsList = props => {
 
 
-  console.log(props.application)
+  console.log(props.applications)
   const applicationsToDisplay = [];
   for (let i = 0; i < props.applications.length; i++) {
     applicationsToDisplay.push(<ApplicationDetails key={`application${i}`} application={props.applications[i]} />);
