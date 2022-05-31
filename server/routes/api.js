@@ -5,7 +5,7 @@ const trackerController = require('../controllers/trackerController');
 const router = express.Router();
 
 router.post("/signup", trackerController.createdUser, (req, res) => {
-  res.send(200).json(res.locals.createdUser);
+  return res.status(200).json(res.locals.data);
 })
 
 // return all applications related to one user
@@ -22,7 +22,7 @@ router.get('/currentApp/:id', trackerController.currentApp, (req, res) => {
 })
 
 router.post("/newApp", trackerController.createApp, (req, res) => {
-  res.send(200).json(res.locals.newApp);
+  return res.status(200).json(res.locals.newApp);
 })
 
 module.exports = router;

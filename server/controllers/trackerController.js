@@ -1,4 +1,4 @@
-const db = require('../models/trackerModel');
+const db = require('../models/trackerModel.js');
 const express = require('express');
 router = express.Router();
 
@@ -35,18 +35,18 @@ trackerController.createdUser = (req, res, next) => {
   const { username, password } = req.body;
   const value = [username, password];
 
-  const query = 'INSERT INTO userInfo (username, password) VALUES ($1,$2)';
+  const query = 'INSERT INTO userInfo (username, password) VALUES ($1,$2) RETURNING *';
 
   db.query(query, value)
     .then((data) => {
-      console.log('createUser:, ', data.rows);
-      res.locals.createdUser = data.rows[0];
+      res.locals.data = {};
+      res.locals.data.user = data.rows[0];
       return next();
     })
     .catch((err) => {
       return next({
         log: 'Express error handler caught trackerController.createdUser',
-        message: { err: 'Check the log' },
+        message: { err: err },
       });
     });
 };
