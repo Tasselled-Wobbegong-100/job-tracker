@@ -7,12 +7,16 @@ console.log('props.applications:', props.applications)
 
   return (
     <div className='JobDashboardContainer'>
-      <header className='dashboardHeader'>
-        <h1>Job Tracker</h1>
+      <header class='LoginHeader dashboardHeader'>
+        <div class='logoAndTitle'>
+          <h1>Job Tassler</h1>
+          <img className='logo' src='http://cdn.onlinewebfonts.com/svg/img_543505.png'></img>
+        </div>
+        <h3>Control the chaos of your job search.</h3>
       </header>
       <div className='listingsAndAppContainer'>
         <RemotiveDisplay getApiInfo={props.getApiInfo} jobs={props.jobs} addApplication={props.addApplication}/>
-        <ApplicationsDisplay applications={props.applications}/>
+        <ApplicationsDisplay applications={props.applications} getCurrentApp={props.getCurrentApp}/>
       </div>
     </div>
   )
