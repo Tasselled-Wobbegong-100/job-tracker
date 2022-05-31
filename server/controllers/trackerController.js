@@ -104,9 +104,28 @@ trackerController.createApp = (req, res, next) => {
     .catch((err) => {
       return next({
         log: 'Express error handler caught trackerController.createdApp',
-        message: { err: 'Check the log' },
+        message: { err: err },
       });
     });
 };
+
+trackerController.currentApp = (req, res, next) => {
+  const id = req.params.id;
+  const value = [id];
+  const query = 'SELECT * FROM appInfo WHERE _id = $1'
+
+  db.query(query, value)
+    .then(data => {
+      console.log(data.rows);
+      res.locals.app = data.rows[0];
+      return next()
+    })
+    .catch((err) => {
+      return next({
+        log: 'Express error handler caught trackerController.createdApp',
+        message: { err: err },
+      });
+    });
+}
 
 module.exports = trackerController;

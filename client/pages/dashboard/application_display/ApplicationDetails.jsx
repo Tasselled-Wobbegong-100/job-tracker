@@ -1,8 +1,12 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ApplicationDetails = props => {
-  const { id, role_title, company, application_status } = props.application;
-  const trackerPath = `/tracker/${id}`;
+
+  let navigate = useNavigate();
+
+  const { _id, role_title, company, application_status } = props.application;
+  const trackerPath = `/tracker/${_id.toString()}`;
 
   return (
     <div className='ApplicationDetailsContainer'>
@@ -12,21 +16,14 @@ const ApplicationDetails = props => {
       <p id='appDetailStatus'>
         Application Status: {application_status}
       </p>
-      {/* <Link to={trackerPath}>To Do List</Link> */}
+      <Link to={trackerPath} id={_id}
+      onClick={async (event) => {
+          await props.getCurrentApp(event);
+          return navigate(`../${trackerPath}`, {replace: true});
+        }
+      }>Edit</Link>
     </div>
   )
 }
-
-//{id: 26,
-        // role_title: "Senior Everything Engineer",
-        // company: "Toys R US",
-        // location: "Antarctica",
-        // interview_number: "500",
-        // application_submitted: "3000 BC (Before Codesmith)",
-        // follow_up_deadline: "May 67th, 2088",
-        // job_type: "Cleaning",
-        // salary: "1 trillion / year",
-        // application_status: "Rejected",
- //     }
 
 export default ApplicationDetails;

@@ -12,7 +12,7 @@ console.log('props.applications:', props.applications)
       </header>
       <div className='listingsAndAppContainer'>
         <RemotiveDisplay getApiInfo={props.getApiInfo} jobs={props.jobs} addApplication={props.addApplication}/>
-        <ApplicationsDisplay applications={props.applications}/>
+        <ApplicationsDisplay applications={props.applications} getCurrentApp={props.getCurrentApp}/>
       </div>
     </div>
   )

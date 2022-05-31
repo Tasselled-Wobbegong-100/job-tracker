@@ -17,6 +17,10 @@ router.get('/getApps/:id', trackerController.returnUser, (req, res) => {
   return res.status(200).json(res.locals.apps)
 })
 
+router.get('/currentApp/:id', trackerController.currentApp, (req, res) => {
+  return res.status(200).json(res.locals.app)
+})
+
 router.post("/newApp", trackerController.createApp, (req, res) => {
   res.send(200).json(res.locals.newApp);
 })
