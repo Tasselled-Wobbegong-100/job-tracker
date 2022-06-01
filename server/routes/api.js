@@ -35,4 +35,8 @@ router.patch('/updateApp/:id', trackerController.updateApp, (req, res) => {
   return res.status(200).json(res.locals.updatedApplication)
 })
 
+router.delete("/deleteApp", trackerController.deleteApp, (req, res) => {
+  return res.status(200).json(res.locals.app)
+})
+
 module.exports = router;
