@@ -196,4 +196,34 @@ trackerController.updateApp = (req,res,next) => {
     });
 }
 
+//deletes app from user applications
+trackerController.deleteApp = (req, res, next) => {
+  // console.log('in app');
+  const { app_id, user_account_id } = req.body;
+  const value = [app_id, user_account_id];
+  // console.log('app_id', app_id)
+  // console.log('user_account_id', user_account_id)
+  //appInfo contains
+  
+  const query = 'DELETE FROM appInfo WHERE appInfo._id=$1 AND appInfo.user_account_id=$2'
+
+  db.query(query, value)
+    .then(data => {
+      // console.log('in db query', data);
+      res.locals.app = app_id;
+      return next();
+    })
+    .catch(err => {
+      // console.log(err);
+      next({
+      log: 'error in deleting app at trackerController',
+      message: { err: 'Check delete app ' }
+    })});
+
+}
+
+
+
+
+
 module.exports = trackerController;
