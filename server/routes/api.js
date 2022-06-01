@@ -4,7 +4,12 @@ const trackerController = require('../controllers/trackerController');
 
 const router = express.Router();
 
-router.post("/signup", trackerController.createdUser, (req, res) => {
+router.post("/signup", trackerController.checkUsername, trackerController.createdUser, (req, res) => {
+  // if username in db already
+  if(res.locals.userValidation === false){
+    return res.sendStatus(400)
+  }
+  // if username is not in db
   return res.status(200).json(res.locals.data);
 })
 
@@ -23,6 +28,11 @@ router.get('/currentApp/:id', trackerController.currentApp, (req, res) => {
 
 router.post("/newApp", trackerController.createApp, (req, res) => {
   return res.status(200).json(res.locals.newApp);
+})
+
+
+router.patch('/updateApp/:id', trackerController.updateApp, (req, res) => {
+  return res.status(200).json(res.locals.updatedApplication)
 })
 
 module.exports = router;
