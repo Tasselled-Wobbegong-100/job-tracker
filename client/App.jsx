@@ -49,6 +49,7 @@ class App extends Component {
       this.setCurrentUser = this.setCurrentUser.bind(this);
       this.submitAppDetail = this.submitAppDetail.bind(this);
       this.getCurrentApp = this.getCurrentApp.bind(this);
+      this.deleteApp = this.deleteApp.bind(this);
       //Nice to have
         //Update job application
         //Delete job application
@@ -168,6 +169,31 @@ class App extends Component {
     return;
   }
 
+  // NEW FUNCTIONALITY TO DELETE APPLICATIONS ON APPLICATION DISPLAY
+  deleteApp(event){
+    event.preventDefault();
+    const appID = event.target.id.toString();
+    const userID = this.state.currentUser.id;
+
+    const reqBody = {
+      app_id: appID,
+      user_id: userID
+    }
+
+    fetch('/api/deleteApps', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(reqBody)
+    })
+    .then(() => {
+      this.getApps(this.state.currentUser);
+    });
+    console.log('DELETE request sent')
+    return;
+  }
+
   async getApps(user) {
     const res = await fetch(`/api/getApps/${user.username}`, {  
       method: 'GET'
@@ -230,10 +256,12 @@ class App extends Component {
             exact
             path="/dashboard"
             element={ <JobDashboard 
-              jobs={this.state.jobs}
+              jobs={this.state.jobs} 
+              currentUser={this.state.currentUser}
               getApiInfo={this.getApiInfo} 
               getCurrentApp={this.getCurrentApp}
-              addApplication={this.addApplication}
+              addApplication={this.addApplication} 
+              deleteApp={this.deleteApp}
               applications={this.state.applications}
             />}
           />
