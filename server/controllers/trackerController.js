@@ -1,5 +1,6 @@
 const db = require('../models/trackerModel.js');
 const express = require('express');
+const e = require('express');
 router = express.Router();
 
 const trackerController = {};
@@ -30,13 +31,50 @@ trackerController.verifyUser = (req, res, next) => {
 }
 
 
-// Creates a new user on signup page
-trackerController.createdUser = (req, res, next) => {
+
+// verify that created user's username isnt in db already
+trackerController.checkUsername =  (req,res,next) => {
   const { username, password } = req.body;
   const value = [username, password];
+  console.log('value', value)
+  // check if fields are empty, if yes return to next piece of middleware
+  if(!value[0] || !value[1]){
+    res.locals.userValidation = false;
+    return next();
+  }
+  // check in database to see if user is already in 
+  db.query(`SELECT * FROM userInfo WHERE username = \'${value[0]}\'`)
+    .then((data) => {
+      // if username is in db rowCount will be more than 0, set userValidation to false if rowcount is greater than 1
+      if(data.rowCount > 0){
+        res.locals.userValidation = false;
+        return next();
+      }else{
+        // if user is not in db then set validation to true and move on to next piece of middleware
+        res.locals.userValidation = true;
+        return next();
+      }
+    })
+    .catch((err) => {
+      return next({
+        log: 'Error in first trackerController.createdUser',
+        message: { err: err },
+      });
+    });
+}
 
+
+// Creates a new user on signup page
+trackerController.createdUser =  (req, res, next) => {
+  const { username, password } = req.body;
+  const value = [username, password];
+  // if locals.userValidation from trackerController.checkUsername is false go to next piece of middleware
+  if(!res.locals.userValidation){
+    console.log(res.locals.userValidation);
+    return next();
+  }
+  // query to database to insert new user
   const query = 'INSERT INTO userInfo (username, password) VALUES ($1,$2) RETURNING *';
-
   db.query(query, value)
     .then((data) => {
       res.locals.data = {};
@@ -45,7 +83,7 @@ trackerController.createdUser = (req, res, next) => {
     })
     .catch((err) => {
       return next({
-        log: 'Express error handler caught trackerController.createdUser',
+        log: 'Error in trackerController.createdUser',
         message: { err: err },
       });
     });
@@ -123,6 +161,36 @@ trackerController.currentApp = (req, res, next) => {
     .catch((err) => {
       return next({
         log: 'Express error handler caught trackerController.createdApp',
+        message: { err: err },
+      });
+    });
+}
+
+
+trackerController.updateApp = (req,res,next) => {
+  console.log('params', req.params);
+  const {id} = req.params;
+  let query = `UPDATE appInfo SET `
+  // iterate through req body looking for column names and values to update
+  
+  for(let key in req.body){
+    console.log(key)
+    const temp = `${key}=\'${req.body[key]}\', `;
+    query += temp;
+  }
+  query = query.slice(0,-2);
+  query += ` WHERE _id=${id}`;
+
+  console.log('query', query);
+  db.query(query)
+    .then(updatedAppData => {
+      console.log('updated application data', updatedAppData)
+      res.locals.updatedApplication = updatedAppData;
+      return next();
+    })
+    .catch((err) => {
+      return next({
+        log: 'Express error handler caught trackerController.updateApp',
         message: { err: err },
       });
     });
