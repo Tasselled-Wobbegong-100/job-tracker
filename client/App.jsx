@@ -177,7 +177,7 @@ class App extends Component {
 
     const reqBody = {
       app_id: appID,
-      user_id: userID
+      user_account_id: userID
     }
 
     fetch('/api/deleteApps', {
