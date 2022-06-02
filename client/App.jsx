@@ -18,6 +18,12 @@ class App extends Component {
         password: '',
         isUser: ''
       },
+      detailChange: {
+        application_submitted: '',
+        application_status: '',
+        interview_number: '',
+        follow_up_deadline: '',
+      },
       applications: [ {_id: 26,
         role_title: "Senior Everything Engineer",
         company: "Toys R US",
@@ -71,7 +77,29 @@ class App extends Component {
       formChange.password = value;
       this.setState({formChange}, () => console.log(this.state.formChange.password));
     }
+    if (id === 'UpdateStatus') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.application_status = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.application_status));
+    }
+    if (id === 'InterviewNum') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.interview_number = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.interview_number));
+    }
+    if (id === 'FollowUp') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.follow_up_deadline = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.follow_up_deadline));
+    }
+    if (id === 'AppSubmitted') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.application_submitted = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.application_submitted));
+    }
   }
+
+  
 
   async submitLogin (event) {
     if (event) event.preventDefault();
@@ -191,8 +219,34 @@ class App extends Component {
     })
   }
 
-  submitAppDetail(detail) {
-    
+  async submitAppDetail(event) {
+    if (event) event.preventDefault();
+    const { detailChange } = this.state;
+    const { _id } = this.state.currentApp;
+    // for (const property in detailChange) {
+    //   if (detailChange[property] !== '') {
+    //     this.setState({...detailChange, [property]: })
+    //   }
+    // }
+    try {
+      await fetch(`/api/updateApp/${_id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({detailChange}),
+        headers: {
+          'Content-Type' : 'application/json'
+        } 
+      });
+      const res = await fetch(`/api/currentApp/${_id}`, {
+        method: 'GET'
+      })
+      const data = await res.json();   
+      this.setState({currentApp: data}, () => {
+        console.log(this.state.currentApp)
+      });
+    }
+    catch(err) {
+      console.log(err);
+    }
   }
 
   getApiInfo () {
@@ -235,6 +289,7 @@ class App extends Component {
               getCurrentApp={this.getCurrentApp}
               addApplication={this.addApplication}
               applications={this.state.applications}
+              submitAppDetail={this.submitAppDetail}
             />}
           />
           <Route
@@ -243,6 +298,8 @@ class App extends Component {
             element={ <ApplicationToDoList 
               currentUser={this.state.currentUser}
               currentApp={this.state.currentApp}
+              submitAppDetail={this.state.submitAppDetail}
+              handleChange={this.handleChange}
             /> }
           />
       </Routes>

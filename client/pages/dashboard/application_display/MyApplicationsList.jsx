@@ -10,6 +10,7 @@ const MyApplicationsList = props => {
       key={`application${i}`}
       application={props.applications[i]}
       getCurrentApp={props.getCurrentApp}
+      submitAppDetail={props.submitAppDetail}
     />);
   }; 
   

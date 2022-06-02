@@ -25,9 +25,9 @@ const SignUp = props => {
       </header>
       <div className='loginContainer'>    
         <form className='loginForm'>
-          <input id='usernameSignUpInput' className='inputTextForm loginPageItems' type='text' placeholder='username' onChange={props.handleChange} autoComplete='off'/>
-          <input id='passwordSignUpInput' className='inputTextForm loginPageItems' type='password' placeholder='password' onChange={props.handleChange}/>
-          <button id='loginSubmitButton' className='submitFormButton loginPageItems' onClick={submit}>Create New Account</button>
+          <input id='usernameSignUpInput' className='inputTextForm loginPageItems' type='text' placeholder='username' onChange={props.handleChange} autoComplete='off' required/>
+          <input id='passwordSignUpInput' className='inputTextForm loginPageItems' type='password' placeholder='password' onChange={props.handleChange} required/>
+          <button id='loginSubmitButton' className='submitFormButton loginPageItems' onClick={submit} type="submit">Create New Account</button>
         </form>
       </div>
     </div>
