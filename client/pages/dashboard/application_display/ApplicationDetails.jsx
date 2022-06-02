@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ApplicationDetails = props => {
@@ -17,12 +17,13 @@ const ApplicationDetails = props => {
         Application Status: {application_status}
       </p>
       <div className='editBu'>
-      <Link to={trackerPath} id={_id}
-      onClick={async (event) => {
-          await props.getCurrentApp(event);
-          return navigate(`../${trackerPath}`, {replace: true});
-        }
-      }>Edit</Link>
+        <Link to={trackerPath} id={_id}
+        onClick={async (event) => {
+            await props.getCurrentApp(event);
+            return navigate(`../${trackerPath}`, {replace: true});
+          }
+        }>Edit      </Link>
+        <a className='removeButtonAppDisplay' onClick={(event) => props.deleteApp(event)} id={_id} userId={props.currentUserId}>Remove</a>
       </div>
     </div>
   )

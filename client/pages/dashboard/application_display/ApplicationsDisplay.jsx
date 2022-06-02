@@ -6,7 +6,7 @@ const ApplicationsDisplay = props => {
   return (
     <div className='ApplicationsDisplayContainer'>
       <h1>Your Applications</h1>
-      <MyApplicationsList applications={props.applications} getCurrentApp={props.getCurrentApp} submitAppDetail={props.submitAppDetail}/>
+      <MyApplicationsList applications={props.applications} currentUser={props.currentUser} getCurrentApp={props.getCurrentApp} deleteApp={props.deleteApp}/>
     </div>
   )
 }
