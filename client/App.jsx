@@ -18,6 +18,12 @@ class App extends Component {
         password: '',
         isUser: ''
       },
+      detailChange: {
+        application_submitted: '',
+        application_status: '',
+        interview_number: '',
+        follow_up_deadline: '',
+      },
       applications: [ {_id: 26,
         role_title: "Senior Everything Engineer",
         company: "Toys R US",
@@ -49,6 +55,7 @@ class App extends Component {
       this.setCurrentUser = this.setCurrentUser.bind(this);
       this.submitAppDetail = this.submitAppDetail.bind(this);
       this.getCurrentApp = this.getCurrentApp.bind(this);
+      this.deleteApp = this.deleteApp.bind(this);
       //Nice to have
         //Update job application
         //Delete job application
@@ -71,7 +78,29 @@ class App extends Component {
       formChange.password = value;
       this.setState({formChange}, () => console.log(this.state.formChange.password));
     }
+    if (id === 'UpdateStatus') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.application_status = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.application_status));
+    }
+    if (id === 'InterviewNum') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.interview_number = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.interview_number));
+    }
+    if (id === 'FollowUp') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.follow_up_deadline = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.follow_up_deadline));
+    }
+    if (id === 'AppSubmitted') {
+      const detailChange = {...this.state.detailChange};
+      detailChange.application_submitted = value;
+      this.setState({detailChange}, () => console.log(this.state.detailChange.application_submitted));
+    }
   }
+
+  
 
   async submitLogin (event) {
     if (event) event.preventDefault();
@@ -168,6 +197,31 @@ class App extends Component {
     return;
   }
 
+  // NEW FUNCTIONALITY TO DELETE APPLICATIONS ON APPLICATION DISPLAY
+  deleteApp(event){
+    event.preventDefault();
+    const appID = event.target.id.toString();
+    const userID = this.state.currentUser.id;
+
+    const reqBody = {
+      app_id: appID,
+      user_account_id: userID
+    }
+
+    fetch('/api/deleteApps', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(reqBody)
+    })
+    .then(() => {
+      this.getApps(this.state.currentUser);
+    });
+    console.log('DELETE request sent')
+    return;
+  }
+
   async getApps(user) {
     const res = await fetch(`/api/getApps/${user.username}`, {  
       method: 'GET'
@@ -191,8 +245,34 @@ class App extends Component {
     })
   }
 
-  submitAppDetail(detail) {
-    
+  async submitAppDetail(event) {
+    if (event) event.preventDefault();
+    const { detailChange } = this.state;
+    const { _id } = this.state.currentApp;
+    // for (const property in detailChange) {
+    //   if (detailChange[property] !== '') {
+    //     this.setState({...detailChange, [property]: })
+    //   }
+    // }
+    try {
+      await fetch(`/api/updateApp/${_id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({detailChange}),
+        headers: {
+          'Content-Type' : 'application/json'
+        } 
+      });
+      const res = await fetch(`/api/currentApp/${_id}`, {
+        method: 'GET'
+      })
+      const data = await res.json();   
+      this.setState({currentApp: data}, () => {
+        console.log(this.state.currentApp)
+      });
+    }
+    catch(err) {
+      console.log(err);
+    }
   }
 
   getApiInfo () {
@@ -230,11 +310,14 @@ class App extends Component {
             exact
             path="/dashboard"
             element={ <JobDashboard 
-              jobs={this.state.jobs}
+              jobs={this.state.jobs} 
+              currentUser={this.state.currentUser}
               getApiInfo={this.getApiInfo} 
               getCurrentApp={this.getCurrentApp}
-              addApplication={this.addApplication}
+              addApplication={this.addApplication} 
+              deleteApp={this.deleteApp}
               applications={this.state.applications}
+              submitAppDetail={this.submitAppDetail}
             />}
           />
           <Route
@@ -243,6 +326,8 @@ class App extends Component {
             element={ <ApplicationToDoList 
               currentUser={this.state.currentUser}
               currentApp={this.state.currentApp}
+              submitAppDetail={this.state.submitAppDetail}
+              handleChange={this.handleChange}
             /> }
           />
       </Routes>
