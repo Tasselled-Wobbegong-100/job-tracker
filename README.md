@@ -2,7 +2,7 @@
 
 ## How to create new tables on ElephantSQL
 
-You'll need to use your own databse to test any work done on this project. To do this, head to ElephantSQL, create a new instance, head to the browser section, and add the following code.
+You'll need to use your own database to test any work done on this project. To do this, head to ElephantSQL, create a new instance, head to the browser section, and add the following code.
 
 ### Create a user table
 
@@ -17,7 +17,9 @@ password VARCHAR(50)
 
 );
 ```
+
 ### Create an application table
+
 ```
 CREATE TABLE appInfo (
 
